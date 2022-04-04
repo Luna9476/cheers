@@ -1,0 +1,30 @@
+{
+    "name": "Cheers",
+    "description": "Watch videos with your friends.",
+    "version": "1.0",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "js/background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "js/lib/peerjs.min.js"
+            ]
+        }
+    ],
+    "permissions": ["activeTab", "scripting", "storage"],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+          "16": "/img/cheers-16x16.png",
+          "24": "/img/cheers-24x24.png",
+          "32": "/img/cheers-32x32.png",
+          "64": "/img/cheers-64x64.png",
+          "128": "/img/cheers-128x128.png"
+        }
+    }
+}

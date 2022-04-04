@@ -1,0 +1,26 @@
+{
+  "name": "biliparty",
+  "version": "1.0.0",
+  "description": "Watch bilibili with friends",
+  "scripts": {
+    "build": "mkdir -p build && cd build && webpack",
+    "lint": "eslint src/js/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wenhao Ji",
+  "license": "MIT",
+  "engines": {
+    "node": "7.0.0",
+    "npm": "3.10.8"
+  },
+  "devDependencies": {
+    "eslint": "3.14.0",
+    "eslint-config-airbnb": "14.0.0",
+    "eslint-import-resolver-babel-module": "2.2.1",
+    "eslint-plugin-import": "2.2.0",
+    "webpack": "2.2.1",
+    "webpack-dev-server": "1.16.2",
+    "webpack-node-externals": "1.5.4",
+    "webpack-version-file-plugin": "0.2.2"
+  }
+}
