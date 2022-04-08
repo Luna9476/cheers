@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './App.css'
-import './js/popup.js'
+// import './js/popup.js'
 
 export default function App() {
-  
+
     return (
         <div className="App">
             <body>
