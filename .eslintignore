@@ -1,3 +1,6 @@
 build/
 src/js/lib/
 src/js/popup.js
+src/App.js
+src/index.js
+src/**/*.test.js

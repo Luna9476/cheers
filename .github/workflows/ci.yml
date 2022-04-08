@@ -17,5 +17,6 @@ jobs:
         with:
           node-version: '17.x'
       - run: npm ci
-      - run: ./node_modules/.bin/eslint src/js
+      - run: npm run lint
       - run: npm test
+      - run: npm run build
