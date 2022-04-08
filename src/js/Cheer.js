@@ -7,6 +7,7 @@ class Attendee {
   peerId;
 
   _peer;
+
   _listeners = {
     open: [],
     close: []
@@ -58,7 +59,7 @@ class Attendee {
       if (!eventListeners) {
         return;
       }
-      this._listeners[event] = this._listeners[event].filter(e => e !== fn);
+      this._listeners[event] = this._listeners[event].filter((e) => e !== fn);
     }
   }
 
@@ -85,7 +86,7 @@ export class Host extends Attendee {
       Host._log.info(`A guest peer connected: ${JSON.stringify(guest)}`);
       const releaseGuestConnection = () => {
         guest.disconnect();
-        hostSelf._guests = hostSelf._guests.filter(e => e !== guest);
+        hostSelf._guests = hostSelf._guests.filter((e) => e !== guest);
         for (const listener of hostSelf._listeners.leave) {
           listener.call(hostSelf, guest);
         }
@@ -94,7 +95,7 @@ export class Host extends Attendee {
       guest.on('disconnect', releaseGuestConnection);
       hostSelf._guests.push(guest);
 
-      hostSelf._guests = hostSelf._guests.filter(e => e !== guest);
+      hostSelf._guests = hostSelf._guests.filter((e) => e !== guest);
       for (const listener of hostSelf._listeners.join) {
         listener.call(hostSelf, guest);
       }
@@ -135,6 +136,7 @@ export class Guest extends Attendee {
   static _log = getLogger(Guest);
 
   _hostPeerId;
+
   _hostConnection;
 
   constructor(hostPeerId, peerSettings) {

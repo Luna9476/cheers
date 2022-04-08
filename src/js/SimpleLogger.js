@@ -28,6 +28,7 @@ class ConsoleAppender {
 
 class Logger {
   #loggerName;
+
   #appender;
 
   constructor(loggerName, appender) {
@@ -77,30 +78,28 @@ class Logger {
   }
 }
 
-export default {
-  getLogger(logger) {
-    let loggerName;
-    if (!logger) {
-      loggerName = ROOT_LOGGER_NAME;
-    } else if (typeof logger === 'string' || logger instanceof String) {
-      loggerName = logger;
-    } else if (logger.name) {
-      loggerName = logger.name;
-    } else {
-      throw new Error('The logger must have a name.');
-    }
-    return new Logger(loggerName, logSettings.appender);
-  },
-
-  setLevel(level) {
-    const levelNo = Levels[level];
-    if (!levelNo) {
-      throw new Error(`The level '${level}' does not exist.`);
-    }
-    logSettings.level = levelNo;
-  },
-
-  setAppender(appender) {
-    logSettings.appender = appender;
+export function getLogger(logger) {
+  let loggerName;
+  if (!logger) {
+    loggerName = ROOT_LOGGER_NAME;
+  } else if (typeof logger === 'string' || logger instanceof String) {
+    loggerName = logger;
+  } else if (logger.name) {
+    loggerName = logger.name;
+  } else {
+    throw new Error('The logger must have a name.');
   }
-};
+  return new Logger(loggerName, logSettings.appender);
+}
+
+export function setLevel(level) {
+  const levelNo = Levels[level];
+  if (!levelNo) {
+    throw new Error(`The level '${levelNo}' does not exist.`);
+  }
+  logSettings.level = levelNo;
+}
+
+export function setAppender(appender) {
+  logSettings.appender = appender;
+}

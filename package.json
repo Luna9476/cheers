@@ -15,6 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "INLINE_RUNTIME_CHUNK=false craco build",
+    "lint": "eslint src/js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
