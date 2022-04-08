@@ -32,6 +32,10 @@
   },
   "devDependencies": {
     "@types/chrome": "^0.0.126",
-    "@types/react-router-dom": "^5.1.6"
+    "@types/react-router-dom": "^5.1.6",
+    "babel-eslint": "^10.1.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-import-resolver-babel-module": "5.3.1",
+    "eslint-plugin-import": "2.26.0"
   }
 }
