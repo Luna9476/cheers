@@ -1,6 +1,6 @@
-const ROOT_LOGGER_NAME = 'ROOT';
+export const ROOT_LOGGER_NAME = 'ROOT';
 
-const Levels = {
+export const Levels = {
   ALL: 0,
   DEBUG: 20,
   INFO: 40,
@@ -9,9 +9,12 @@ const Levels = {
   OFF: 999
 };
 
+const LEVEL_NAMES = Object.fromEntries(Object.entries(Levels).map((a) => a.reverse()));
+
 const logSettings = {
   level: Levels.WARN,
-  appender: null
+  appender: null,
+  time: Date
 };
 
 class ConsoleAppender {
@@ -31,49 +34,52 @@ class Logger {
 
   #appender;
 
-  constructor(loggerName, appender) {
+  #time;
+
+  constructor(loggerName, appender, time) {
     this.#loggerName = loggerName || ROOT_LOGGER_NAME;
     this.#appender = appender || new ConsoleAppender(console);
+    this.#time = time || Date;
   }
 
   _log(log) {
-    if (!log.msg) {
+    if (!log.message) {
       return;
     }
     const logLevel = log.level || Levels.INFO;
     if (logSettings.level > logLevel) {
       return;
     }
-    const ts = log.timestamp || Date.now();
-    const line = `${new Date(ts).toISOString()} [${logLevel}] ${this.#loggerName} - ${log.msg}`;
+    const ts = log.timestamp || this.#time.now();
+    const line = `${new Date(ts).toISOString()} [${LEVEL_NAMES[logLevel]}] ${this.#loggerName} - ${log.message}`;
     this.#appender.print(line);
   }
 
   debug(msg) {
     this._log({
       level: Levels.DEBUG,
-      messsage: msg
+      message: msg
     });
   }
 
   info(msg) {
     this._log({
       level: Levels.INFO,
-      messsage: msg
+      message: msg
     });
   }
 
   warn(msg) {
     this._log({
       level: Levels.WARN,
-      messsage: msg
+      message: msg
     });
   }
 
   error(msg) {
     this._log({
       level: Levels.ERROR,
-      messsage: msg
+      message: msg
     });
   }
 }
@@ -89,17 +95,21 @@ export function getLogger(logger) {
   } else {
     throw new Error('The logger must have a name.');
   }
-  return new Logger(loggerName, logSettings.appender);
+  return new Logger(loggerName, logSettings.appender, logSettings.time);
 }
 
 export function setLevel(level) {
-  const levelNo = Levels[level];
-  if (!levelNo) {
-    throw new Error(`The level '${levelNo}' does not exist.`);
+  const levelName = LEVEL_NAMES[level];
+  if (!levelName) {
+    throw new Error(`The level '${levelName}' does not exist.`);
   }
-  logSettings.level = levelNo;
+  logSettings.level = level;
 }
 
 export function setAppender(appender) {
   logSettings.appender = appender;
+}
+
+export function setTime(time) {
+  logSettings.time = time;
 }
