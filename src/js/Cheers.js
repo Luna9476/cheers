@@ -1,4 +1,3 @@
-import Peer from 'peerjs';
 import { getLogger } from './SimpleLogger';
 
 class Attendee {
@@ -13,10 +12,13 @@ class Attendee {
     close: []
   };
 
-  constructor(peerSettings) {
-    Attendee._log.debug(`The PeerJS settings: ${JSON.stringify(peerSettings)}`);
-    this._peer = new Peer(peerSettings);
-    Attendee._log.info(`Using the PeerJS server: ${peerSettings?.host || 'default'})`);
+  constructor(peer) {
+    if (!peer) {
+      throw new Error('peer is required.');
+    }
+    this._peer = peer;
+    Attendee._log.debug(`The PeerJS options: ${JSON.stringify(peer?.options)}`);
+    Attendee._log.info(`Using the PeerJS server: ${peer?.options?.host || 'default'}`);
 
     const attendeeSelf = this;
     this._peer.on('open', (peerId) => {
@@ -28,8 +30,10 @@ class Attendee {
     });
 
     this._peer.on('close', () => {
-      for (const listener of attendeeSelf._listeners.close) {
-        listener.call(attendeeSelf);
+      if (attendeeSelf._listeners.close) {
+        for (const listener of attendeeSelf._listeners.close) {
+          listener.call(attendeeSelf);
+        }
       }
     });
   }
@@ -74,8 +78,8 @@ export class Host extends Attendee {
 
   _guests = [];
 
-  constructor(peerSettings) {
-    super(peerSettings);
+  constructor(peer) {
+    super(peer);
 
     this._listeners.join = [];
     this._listeners.message = [];
@@ -83,26 +87,31 @@ export class Host extends Attendee {
 
     const hostSelf = this;
     this._peer.on('connection', (guest) => {
-      Host._log.info(`A guest peer connected: ${JSON.stringify(guest)}`);
+      Host._log.info('A guest peer connected.');
       const releaseGuestConnection = () => {
-        guest.disconnect();
+        Host._log.info('The guest peer disconnected.');
         hostSelf._guests = hostSelf._guests.filter((e) => e !== guest);
-        for (const listener of hostSelf._listeners.leave) {
-          listener.call(hostSelf, guest);
+        if (hostSelf._listeners.leave) {
+          for (const listener of hostSelf._listeners.leave) {
+            listener.call(hostSelf, guest);
+          }
         }
       };
       guest.on('close', releaseGuestConnection);
       guest.on('disconnect', releaseGuestConnection);
       hostSelf._guests.push(guest);
 
-      hostSelf._guests = hostSelf._guests.filter((e) => e !== guest);
-      for (const listener of hostSelf._listeners.join) {
-        listener.call(hostSelf, guest);
+      if (hostSelf._listeners.join) {
+        for (const listener of hostSelf._listeners.join) {
+          listener.call(hostSelf, guest);
+        }
       }
 
       guest.on('data', (data) => {
-        for (const listener of hostSelf._listeners.message) {
-          listener.call(hostSelf, guest, data);
+        if (hostSelf._listeners.message) {
+          for (const listener of hostSelf._listeners.message) {
+            listener.call(hostSelf, data);
+          }
         }
       });
     });
@@ -119,6 +128,7 @@ export class Host extends Attendee {
   }
 
   broadcast(message) {
+    Host._log.debug(`Boardcasting the message ${JSON.stringify(message)} to ${this._guests.length} guests`);
     for (const guest of this._guests) {
       guest.send(message);
     }
@@ -139,8 +149,8 @@ export class Guest extends Attendee {
 
   _hostConnection;
 
-  constructor(hostPeerId, peerSettings) {
-    super(peerSettings);
+  constructor(hostPeerId, peer) {
+    super(peer);
 
     if (!hostPeerId) {
       throw new Error('hostPeerId is required');
