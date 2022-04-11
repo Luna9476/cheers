@@ -1,28 +1,4 @@
-// chrome.storage.sync.get("color", ({ color }) => {
-//     changeColor.style.backgroundColor = color;
-// });
-
-document.getElementById('host').addEventListener('click', async () => {
-    let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        function: host,
-    });
-});
-
-document.getElementById('join').addEventListener('click', async () => {
-    var peerId = document.getElementById('peerId').value;
-    if (peerId) {
-        let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-        chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            function: join,
-            args: [peerId]
-        });
-    }
-});
-
-function host() {
+export function host() {
     console.log('host');
 
     const state = {
@@ -127,7 +103,7 @@ function host() {
     });
 }
 
-function join(hostPeerId) {
+export function join(hostPeerId) {
     console.log('join(' + hostPeerId + ')');
 
     const state = {
