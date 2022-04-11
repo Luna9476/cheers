@@ -13,5 +13,15 @@
           "64": "cheers-64x64.png",
           "128": "cheers-128x128.png"
         }
-    }
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "static/js/peerjs.js"
+            ]
+        }
+    ]
 }
