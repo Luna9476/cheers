@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './App.css'
-import {host, join} from './js/popup.js'
+import { host, join } from './Popup'
 
 export default function App() {
     const onHost = async () => {
