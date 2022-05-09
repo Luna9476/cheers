@@ -10,6 +10,7 @@
     "import/prefer-default-export": 0,
     "max-classes-per-file": 0,
     "no-param-reassign": ["error", { "props": false }],
+    "no-plusplus": 0,
     "no-restricted-syntax": 0,
     "no-underscore-dangle": 0,
     "yoda": 0,
