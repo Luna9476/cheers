@@ -5,13 +5,24 @@
     "es6": true,
     "webextensions": true
   },
-  "extends": "airbnb/base",
+  "extends": [
+    "airbnb/base",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:testing-library/react",
+    "plugin:jest/all"
+  ],
   "parser": "@babel/eslint-parser",
   "rules": {
     "comma-dangle": 0,
     "import/prefer-default-export": 0,
     "max-classes-per-file": 0,
-    "no-param-reassign": ["error", { "props": false }],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
     "no-plusplus": 0,
     "no-restricted-syntax": 0,
     "no-underscore-dangle": 0,
@@ -21,6 +32,9 @@
   "settings": {
     "import/resolver": {
       "babel-module": {}
+    },
+    "react": {
+      "version": "detect"
     }
   }
 }

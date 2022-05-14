@@ -34,6 +34,7 @@
   "devDependencies": {
     "@babel/core": "^7.17.9",
     "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-react": "^7.16.7",
     "@types/chrome": "^0.0.126",
     "@types/react-router-dom": "^5.1.6",
     "eslint": "^8.12.0",
