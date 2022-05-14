@@ -1,23 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './App.css'
-import { host, join } from './Popup'
 
 export default function App() {
     const onHost = async () => {
         let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
         chrome.scripting.executeScript({
             target: { tabId: tab.id },
-            function: host,
+            function: () => { window.cheers.host() }
         });
     }
 
     const onJoin = async () => {
-        var peerId = peerId.value;
+        const peerId = document.getElementById('peerId').value;
         if (peerId) {
             let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
             chrome.scripting.executeScript({
                 target: { tabId: tab.id },
-                function: join,
+                function: (peerId) => { window.cheers.join(peerId) },
                 args: [peerId]
             });
         }

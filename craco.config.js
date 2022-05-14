@@ -4,9 +4,8 @@ module.exports = {
             return {
                 ...webpackConfig,
                 entry: {
-                    main: [env === 'development' &&
-                    require.resolve('react-dev-utils/webpackHotDevClient'),paths.appIndexJs].filter(Boolean),
-                    peerjs: './src/js/lib/peerjs.min.js'
+                    main: [env === 'development' && require.resolve('react-dev-utils/webpackHotDevClient'),paths.appIndexJs].filter(Boolean),
+                    content: './src/Content.js'
                 },
                 output: {
                     ...webpackConfig.output,
@@ -14,9 +13,9 @@ module.exports = {
                 },
                 optimization: {
                     ...webpackConfig.optimization,
-                    runtimeChunk: false,
+                    runtimeChunk: false
                 }
             }
-        },
+        }
     }
 }

@@ -50,6 +50,7 @@ class Attendee {
       this._listeners[event] = [];
     }
     this._listeners[event].push(fn);
+    return this;
   }
 
   off(event, fn) {
@@ -61,14 +62,15 @@ class Attendee {
     } else {
       const eventListeners = this._listeners[event];
       if (!eventListeners) {
-        return;
+        return this;
       }
       this._listeners[event] = this._listeners[event].filter((e) => e !== fn);
     }
+    return this;
   }
 
   close() {
-    this._peer.close();
+    this._peer.destroy();
     this._listeners = {};
   }
 }
@@ -110,7 +112,7 @@ export class Host extends Attendee {
       guest.on('data', (data) => {
         if (hostSelf._listeners.message) {
           for (const listener of hostSelf._listeners.message) {
-            listener.call(hostSelf, data);
+            listener.call(hostSelf, data, guest);
           }
         }
       });
@@ -121,10 +123,11 @@ export class Host extends Attendee {
     for (const guest of this._guests) {
       if (guest === target) {
         target.close();
-        return;
+        return this;
       }
     }
     Host._log.warn('The guest does not exist.');
+    return this;
   }
 
   broadcast(message) {
@@ -132,6 +135,7 @@ export class Host extends Attendee {
     for (const guest of this._guests) {
       guest.send(message);
     }
+    return this;
   }
 
   close() {
@@ -169,11 +173,11 @@ export class Guest extends Attendee {
         Guest._log.info(`Connected to the host. (peerId = ${hostPeerId})`);
 
         for (const listener of guestSelf._listeners.join) {
-          listener.call(guestSelf);
+          listener.call(guestSelf, guestSelf._hostConnection);
         }
 
         guestSelf._hostConnection.on('data', (data) => {
-          Guest._log.debug(`Received data from the host: ${JSON.stringifydata}`);
+          Guest._log.debug(`Received data from the host: ${JSON.stringify(data)}`);
           for (const listener of guestSelf._listeners.message) {
             listener.call(guestSelf, data);
           }
