@@ -76,7 +76,7 @@ export class MockPeer {
     }
   }
 
-  close() {
+  destroy() {
     this.fire('close');
   }
 }

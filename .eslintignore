@@ -1,3 +1,4 @@
+craco.config.js
 build/
 src/js/lib/
 src/App.js

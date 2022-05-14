@@ -20,7 +20,7 @@
                 "<all_urls>"
             ],
             "js": [
-                "static/js/peerjs.js"
+                "static/js/content.js"
             ]
         }
     ]
