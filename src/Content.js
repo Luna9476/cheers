@@ -34,6 +34,14 @@ class VideoHost {
 
     const self = this;
 
+    this.host.on('open', (peerId) => {
+      log.debug(`Sending a message to the popup that the host peerId (${peerId}) was generated.`);
+      chrome.runtime.sendMessage({
+        event: 'hosted',
+        peerId
+      });
+    });
+
     this.host.on('join', (guest) => {
       guest.send({
         event: 'hello',
@@ -56,23 +64,27 @@ class VideoHost {
       }
     });
 
-    this.videoElement.addEventListener('play', () => {
+    this._playListener = () => {
       self.status = 'play';
       self.host.broadcast({
         event: 'play',
         epoch: self.epoch++,
         currentTime: videoElement.currentTime
       });
-    });
-    this.videoElement.addEventListener('pause', () => {
+    };
+    this.videoElement.addEventListener('play', this._playListener);
+
+    this._pauseListener = () => {
       self.status = 'pause';
       self.host.broadcast({
         event: 'pause',
         epoch: self.epoch++,
         currentTime: videoElement.currentTime
       });
-    });
-    this.videoElement.addEventListener('timeupdate', () => {
+    };
+    this.videoElement.addEventListener('pause', this._pauseListener);
+
+    this._timeupdateListener = () => {
       const currentTimestamp = new Date().getTime();
       if (self.lastTimeUpdateAt
         && currentTimestamp - self.lastTimeUpdateAt < self.timeUpdateInterval) {
@@ -85,14 +97,19 @@ class VideoHost {
         epoch: self.epoch++,
         currentTime: videoElement.currentTime
       });
-    });
-    // this.videoElement.addEventListener('waiting', null); TODO
+    };
+    this.videoElement.addEventListener('timeupdate', this._timeupdateListener);
   }
 
   close() {
     if (this._pingPongTimeoutId) {
       clearTimeout(this._pingPongTimeoutId);
     }
+
+    this.videoElement.removeEventListener('play', this._playListener);
+    this.videoElement.removeEventListener('pause', this._pauseListener);
+    this.videoElement.removeEventListener('timeupdate', this._timeupdateListener);
+
     this.host.close();
   }
 }
@@ -154,11 +171,15 @@ class VideoGuest {
             break;
           case 'play':
             log.info(`The delay between host and guest is ${self._pingPong.getDelaySec()} ms.)`);
-            seekCurrentTime(currentTime + self._pingPong.getDelaySec(), true);
+            if (currentTime) {
+              seekCurrentTime(currentTime + self._pingPong.getDelaySec(), true);
+            }
             videoElement.play().catch(() => {});
             break;
           case 'pause':
-            seekCurrentTime(currentTime + self._pingPong.getDelaySec(), true);
+            if (currentTime) {
+              seekCurrentTime(currentTime + self._pingPong.getDelaySec(), true);
+            }
             videoElement.pause();
             break;
           case 'timeupdate':

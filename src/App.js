@@ -1,8 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './App.css'
 
+const CONTENT_MAIN_JS = 'static/js/content.js'
+
 export default function App() {
+    const loadContent = async () => {
+        let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        let [execution] = await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            function: () => { return window.cheers != null; }
+        });
+        if (!execution.result) {
+            await chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                files: [CONTENT_MAIN_JS],
+            });
+        }
+    }
+
     const onHost = async () => {
+        await loadContent();
         let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
         chrome.scripting.executeScript({
             target: { tabId: tab.id },
@@ -11,9 +28,10 @@ export default function App() {
     }
 
     const onJoin = async () => {
+        await loadContent();
+        let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
         const peerId = document.getElementById('peerId').value;
         if (peerId) {
-            let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
             chrome.scripting.executeScript({
                 target: { tabId: tab.id },
                 function: (peerId) => { window.cheers.join(peerId) },
@@ -21,6 +39,17 @@ export default function App() {
             });
         }
     }
+
+    chrome.runtime.onMessage.addListener((message) => {
+        switch (message.event) {
+            case 'hosted':
+                const { peerId } = message;
+                console.log(`Host peerId = ${peerId}`)
+                break
+            default:
+                break;
+        }
+    });
 
     const peerId = useRef(null)
 

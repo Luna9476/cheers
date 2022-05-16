@@ -36,7 +36,7 @@ export default class PingPong {
     if (this._delayCount <= 0) {
       return 0;
     }
-    return this._delaySum / this._delayCount / 1000;
+    return this._delaySum / this._delayCount / 2000;
   }
 
   close() {
