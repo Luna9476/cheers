@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './App.css'
-import IconButton from './components/Button';
+import IconButton from './components/IconButton'
 
 const CONTENT_MAIN_JS = 'static/js/content.js'
 
@@ -18,6 +18,8 @@ export default function App() {
             });
         }
     }
+    const [connectStatus, setConnectStatus] = useState(null);
+
 
     const onHost = async () => {
         await loadContent();
@@ -26,6 +28,7 @@ export default function App() {
             target: { tabId: tab.id },
             function: () => { window.cheers.host() }
         });
+        setConnectStatus("hosted");
     }
 
     const onJoin = async () => {
@@ -39,6 +42,7 @@ export default function App() {
                 args: [peerId]
             });
         }
+        setConnectStatus("join")
     }
 
     chrome.runtime.onMessage.addListener((message) => {
@@ -54,6 +58,41 @@ export default function App() {
 
     const peerId = useRef(null)
 
+    const renderStatusComponent = () => {
+        switch (connectStatus) {
+            case "hosted":
+                return (<>
+                    <h1>You are in the room</h1>
+                    <h2>Copy and paste the peerId</h2>
+                </>)
+            case "join":
+                return (
+                    <>
+                        paste peer id here<input type={"text"}></input>
+                    </>
+                )
+            case "connected":
+                return (
+                    <>
+                        <h1>You are connected</h1>
+                    </>
+                )
+            default:
+                return (<>
+                    <div className="content">
+                        <div>
+                            <IconButton id="host" onClick={onHost} startIcon={"home"}>Host</IconButton>
+                        </div>
+                        <div className="content-divider">
+                            <span>or</span>
+                        </div>
+                        <div>
+                            <IconButton id="join" onClick={onJoin} startIcon={"rocket_launch"}>Join</IconButton>
+                        </div>
+                    </div>
+                </>)
+        }
+    }
     return (
         <>
             <header>
@@ -61,26 +100,14 @@ export default function App() {
                 <h1>Cheers!</h1>
                 <h2>Watch videos with friends.</h2>
             </header>
-
-            <div className="content">
-                <div>
-                    <IconButton id="host" onClick={onHost} startIcon={"home"}>Host</IconButton>
-                </div>
-                <div className="content-divider">
-                    <span>or</span>
-                </div>
-                <div>
-                    <IconButton id="join" onClick={onJoin} startIcon={"rocket_launch"}>Join</IconButton>
-                </div>
-            </div>
+            {renderStatusComponent()}
             <footer>
                 <a target="_blank" href="https://github.com/predatorray">About</a>
-                
+
                 <a target="_blank" href="https://github.com/predatorray">Report</a>
-                
+
                 <a target="_blank" href="https://github.com/predatorray">Author</a>
             </footer>
-
         </>
 
     );
