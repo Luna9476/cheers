@@ -1,7 +1,15 @@
-import React from "react";
+import React from 'react';
+import './style.css';
 
-function Button(props) {
-  return <button>{props.children}</button>;
+export default function IconButton(props) {
+    return (
+        <>
+
+            <button>
+                <span className='material-icons button-icon'>{props.startIcon}</span>
+                {props.children}
+            </button>
+        </>
+
+    );
 }
-
-export default Button;

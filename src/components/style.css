@@ -1,0 +1,25 @@
+.content button {
+    display: inline-flex;
+    width: 100%;
+    padding: 6px 16px;
+    line-height: 1.3333333;
+    border-radius: 20px;
+    justify-content: center;
+    color: #fff;
+    background-color: #ec407a;
+    border: 1px solid transparent;
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+.content button:hover {
+    background-color: #e91e63;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+}
+
+.button-icon {
+    margin-right: 8px;
+    margin-left: -4px;
+    font-size: 1rem;
+    font-weight: 500;
+}
