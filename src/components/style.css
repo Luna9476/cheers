@@ -1,4 +1,5 @@
 .content button {
+    margin-bottom: 20px;
     display: inline-flex;
     width: 100%;
     padding: 6px 16px;
@@ -14,7 +15,7 @@
 .content button:hover {
     background-color: #e91e63;
     cursor: pointer;
-    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    box-shadow: 0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%);
 }
 
 .button-icon {
@@ -22,4 +23,37 @@
     margin-left: -4px;
     font-size: 1rem;
     font-weight: 500;
+}
+
+.host-body {
+    margin: -10px auto 20px;
+    width: 80%;
+    color: #2e384d;
+}
+
+.host-body p {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 0.75rem;
+    display: inline;
+}
+
+.host-body .id-content {
+    background-color: #e7ebf0;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.host-body a.link{
+    color: #ec407a;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.host-body .material-icons-outlined {
+    font-size: 1rem;
+}
+
+.host-body a.float-right {
+    float: right;
 }

@@ -33,7 +33,7 @@ header h2 {
 }
 
 .content {
-    padding: 14px 30px;
+    padding: 14px 30px 0;
 }
 
 .content input {
@@ -69,14 +69,10 @@ header h2 {
 }
 
 
-.content hr {
-    margin: 12px 0;
-    border: 0.8px solid #d4d4d4;
-}
-
 footer {
     margin: 10px auto 8px auto;
     text-align: center;
+    clear: both;
 }
 
 footer>a {
@@ -89,4 +85,9 @@ footer>a {
 .hidden {
     display: none !important;
     visibility: hidden !important;
+}
+
+.icon-button {
+    cursor: pointer;
+    font-size: 1rem;
 }
